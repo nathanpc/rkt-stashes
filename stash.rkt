@@ -7,6 +7,7 @@
 
 (require racket/file)
 
+; Open stash.
 (define open-file
   (lambda (filename)
 	(define file "")
@@ -23,5 +24,28 @@
 
 	file))
 
+; Get the title and description of the stash.
+(define get-headers
+  (lambda (file-contents)
+	; Parse headers.
+	(define raw-header (list-ref
+						(regexp-match #px"(?-s:^.+(\n)+.+)" file-contents)
+						0))
+	(define headers (string-split raw-header #px"\n+"))
+
+	; Remove the crap from the title.
+	(define title (list-ref
+				   (regexp-match #px"^[=]+ (.+) [=]+$" (list-ref headers 0))
+				   1))
+
+	; Create the return list.
+	(list title (list-ref headers 1))))
+
+; Get the items in the stash.
+(define get-items
+  (lambda (file-contents)
+	(define items (regexp-match #px"---\n(.+)\n---" file-contents))
+	items))
+
 (define file-contents (open-file "/home/nathanpc/Stashes/FM Stuff.stash"))
-(displayln file-contents)
+;(displayln file-contents)
