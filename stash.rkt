@@ -39,13 +39,22 @@
 				   1))
 
 	; Create the return list.
-	(list title (list-ref headers 1))))
+	(hash 'title title
+		  'description (list-ref headers 1))))
 
 ; Get the items in the stash.
 (define get-items
   (lambda (file-contents)
-	(define items (regexp-match #px"---\n(.+)\n---" file-contents))
+	; Parse the items and clean the raw regexp match list.
+	(define items (filter (lambda (item)
+							(not (equal? item "")))
+						  (list-tail (string-split file-contents #px"\n---\n") 1)))
 	items))
 
 (define file-contents (open-file "/home/nathanpc/Stashes/FM Stuff.stash"))
-;(displayln file-contents)
+(define header (get-headers file-contents))
+
+; Print headers.
+(printf "~a~n~a"
+		(hash-ref header 'title)
+		(hash-ref header 'description))
