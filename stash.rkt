@@ -49,12 +49,30 @@
 	(define items (filter (lambda (item)
 							(not (equal? item "")))
 						  (list-tail (string-split file-contents #px"\n---\n") 1)))
+
+	; Parse each item and update the list.
+	(set! items
+		  (map (lambda (body)
+				 (define lines (string-split body #px"\n+"))
+				 (hash 'title (list-ref lines 0)
+					   'href  (list-ref lines 1)
+					   'description (list-ref lines 2)))
+			   items))
 	items))
 
 (define file-contents (open-file "/home/nathanpc/Stashes/FM Stuff.stash"))
 (define header (get-headers file-contents))
+(define items (get-items file-contents))
 
 ; Print headers.
-(printf "~a~n~a"
+(printf "~a~n~a~n~n"
 		(hash-ref header 'title)
 		(hash-ref header 'description))
+
+; Print items.
+(for-each (lambda (item)
+	   (printf "~a~n~a~n~a~n---~n"
+			   (hash-ref item 'title)
+			   (hash-ref item 'href)
+			   (hash-ref item 'description)))
+	 items)
