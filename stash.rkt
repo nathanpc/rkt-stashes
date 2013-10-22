@@ -2,6 +2,7 @@
 ;; A simple application to keep track of your bookmarks, notes, etc.
 
 (require racket/file)
+(require "term-ansicolor.rkt")
 
 ;; Open a stash.
 (define open-file
@@ -19,6 +20,10 @@
 	   (exit))])
 
 	file))
+
+;;
+;; Parsing
+;;
 
 ;; Get the title and description of the stash.
 (define get-headers
@@ -57,6 +62,31 @@
 	items))
 
 ;;
+;; Pretty Printing
+;;
+
+;; Print headers.
+(define print-header
+  (lambda (header)
+	(printf "~a~n~a~n~n"
+			(hash-ref header 'title)
+			(hash-ref header 'description))))
+
+;; Print items.
+(define print-items
+  (lambda (items)
+	(for-each
+	 (lambda (item)
+	   (display (hash-ref item 'title))
+	   (newline)
+	   (colorize 'blue (hash-ref item 'href))
+	   (newline)
+	   (display (hash-ref item 'description))
+	   (display "\n---\n"))
+	 items)))
+	
+
+;;
 ;; Main
 ;;
 
@@ -64,15 +94,6 @@
 (define header (get-headers file-contents))
 (define items (get-items file-contents))
 
-; Print headers.
-(printf "~a~n~a~n~n"
-		(hash-ref header 'title)
-		(hash-ref header 'description))
-
-; Print items.
-(for-each (lambda (item)
-	   (printf "~a~n~a~n~a~n---~n"
-			   (hash-ref item 'title)
-			   (hash-ref item 'href)
-			   (hash-ref item 'description)))
-	 items)
+;; Pretty print stash.
+(print-header header)
+(print-items items)
