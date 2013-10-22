@@ -90,7 +90,7 @@
 ;; Main
 ;;
 
-(define file-contents (open-file "/home/nathanpc/Stashes/FM Stuff.stash"))
+(define file-contents (open-file "./example.stash"))
 (define header (get-headers file-contents))
 (define items (get-items file-contents))
 

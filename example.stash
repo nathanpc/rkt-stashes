@@ -1,0 +1,25 @@
+=== Stashes Example ===
+
+A example stash.
+
+
+---
+Item title
+http://item-url.com/
+
+A simple, one-line, item description.
+---
+
+---
+Stashes GitHub Page
+https://github.com/nathanpc/staches
+
+Stashes repo.
+---
+
+---
+Racket Home Page
+http://racket-lang.org/
+
+The place to get everything about Racket.
+---
