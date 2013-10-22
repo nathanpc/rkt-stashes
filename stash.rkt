@@ -1,13 +1,9 @@
 #lang racket
-
-;; stash.rkt
 ;; A simple application to keep track of your bookmarks, notes, etc.
-;;
-;; @author Nathan Campos <nathanpc@dreamintech.net>
 
 (require racket/file)
 
-; Open stash.
+;; Open a stash.
 (define open-file
   (lambda (filename)
 	(define file "")
@@ -24,7 +20,7 @@
 
 	file))
 
-; Get the title and description of the stash.
+;; Get the title and description of the stash.
 (define get-headers
   (lambda (file-contents)
 	; Parse headers.
@@ -42,7 +38,7 @@
 	(hash 'title title
 		  'description (list-ref headers 1))))
 
-; Get the items in the stash.
+;; Get the items in the stash.
 (define get-items
   (lambda (file-contents)
 	; Parse the items and clean the raw regexp match list.
@@ -59,6 +55,10 @@
 					   'description (list-ref lines 2)))
 			   items))
 	items))
+
+;;
+;; Main
+;;
 
 (define file-contents (open-file "/home/nathanpc/Stashes/FM Stuff.stash"))
 (define header (get-headers file-contents))
